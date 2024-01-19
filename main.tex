@@ -1,0 +1,67 @@
+\documentclass[a4paper,12pt,dvipdfmx]{jsarticle_measlab}
+\bibliographystyle{junsrt_KIT} 
+\usepackage{layout}
+\usepackage{amsmath}
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{here} %画像位置
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\setlist[description]{
+  font={\normalfont}
+}
+
+\let\Re\relax
+\DeclareMathOperator{\Re}{Re}
+\let\Im\relax
+\DeclareMathOperator{\Im}{Im}
+
+% キャプションの設定を変更しないまま Subcaption を導入する．
+\makeatletter
+\let\MYcaption\@makecaption
+\makeatother
+\usepackage{subcaption}
+\captionsetup{compatibility=false}      % 必要に応じて
+\makeatletter
+\let\@makecaption\MYcaption
+\makeatother
+\pagenumbering{roman}
+
+\title{\LARGE Title 1}
+\secondtitle{\LARGE Title 2}
+\author{Your Name}
+\date{5}
+\studentid{Your Student Number}
+\studentname{Your Name}
+\teachername{田中　洋介　准　教　授}
+\secondteachername{村田　滋　教　授}
+% \studentid{\hspace{19pt}18123054\hspace{19pt}}
+% \studentname{\hspace{19pt}中井　大 \hspace{19pt}}
+% \teachername{\hspace{19pt}田中　洋介　准　教　授\hspace{19pt}}
+% \secondteachername{\hspace{19pt}村田 滋　教　授\hspace{19pt}}
+
+\pagenumbering{arabic} 
+
+\begin{document}
+\input{Section/1_introduction.tex}
+\newpage
+\input{Section/2_Theory.tex}
+\newpage
+\input{Section/3_simulation.tex}
+\newpage
+\input{Section/4_experiment.tex}
+\newpage
+\input{Section/5_results.tex}
+\newpage
+\input{Section/6_conclusion.tex}
+\newpage
+\section*{謝辞}
+\addcontentsline{toc}{section}{\gt 謝辞}
+\newpage
+\input{Section/7_achievements.tex}
+\newpage
+\bibliography{refs}
+\addcontentsline{toc}{section}{\gt 参考文献}
+\newpage
+\input{Section/8_appendix.tex}
+\end{document}

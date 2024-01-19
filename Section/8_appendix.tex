@@ -1,0 +1,45 @@
+\appendix
+\section*{付録}
+\addcontentsline{toc}{section}{付録}
+
+\renewcommand{\thesubsection}{\Alph{subsection}}
+\subsection{２粒子ホログラムの近似}
+\label{sec:appendix_2particle}
+
+\subsection{異径・奥行方向距離を持つ場合の２粒子ホログラム}
+\label{sec:appendix_deviation}
+
+
+\subsubsection{奥行方向距離を持たない異径粒子組についてのメモ}
+AEMでは，粒子１が記録されたときの複素振幅を $\psi_1$，粒子2を $\psi_2$として，
+\begin{equation}
+    I(x,y) = |\psi_1|^2 + |\psi_2|^2 -1
+\end{equation}
+が成り立つと仮定した．さらに，
+\begin{equation}
+    \varphi_1(\alpha,\beta) = \mathcal{F}\{|\psi_1|^2\} \approx \cos{(\pi \lambda z_0 \gamma^2)} \tilde{A_1}
+\end{equation}
+\begin{align}
+    \varphi_2(\alpha,\beta) = \mathcal{F}\{|\psi_2|^2\} &\approx \cos{(\pi \lambda z_0 \gamma^2)} \tilde{A_2} \\
+    &= \cos{(\pi \lambda z_0 \gamma^2)} \exp{(-2\pi \mathrm{j} (\alpha \Delta \xi + \beta \Delta \eta))} \tilde{A'_2}
+\end{align}
+が成り立つ．ただし， $A'_2$は，粒子1とことなる粒径を持つ粒子２が，粒子１同様原点中心になるときの形状関数である．つまり，以下の関係を満たす．
+\begin{equation}
+    A'_2(x-\Delta \xi, y- \Delta \eta ) = A_2
+\end{equation}
+ここで，粒子1の粒径を $a$ ，粒子２の粒径を $a+\Delta a$ とすると， $\tilde{A_1}$および $\tilde{A_2}$ はそれぞれ
+\begin{equation}
+    \tilde{A_1}(\alpha,\beta) = a \frac{J_1(2\pi a \gamma)}{\gamma}
+\end{equation}
+\begin{equation}
+    \tilde{A'_2}(\alpha,\beta) = (a+ \Delta a) \frac{J_1(2\pi (a + \Delta a) \gamma)}{\gamma}
+\end{equation}
+となる． $\tilde{A'_2}$ を $\tilde{A_1}$ によって表現できたら，AEMで論じた以下の式と剰余項の和として扱える．
+\begin{align}
+    \varphi &= \varphi_1(\alpha,\beta) + \varphi_2(\alpha,\beta) \\
+    &= \tilde{A_1} \cos{(\pi \lambda z_0 \gamma^2) \cos{(\pi  (\alpha \Delta \xi + \beta \Delta \eta))}}\exp{(\pi \mathrm{j} (\alpha \Delta \xi + \beta \Delta \eta))} + O
+\end{align}
+
+\begin{equation}
+    v_{\theta} = \frac{C}{2\pi r} \left( 1- \exp{\left(-\frac{Ar^2}{2\nu}\right)} \right)
+\end{equation}
