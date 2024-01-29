@@ -1,0 +1,198 @@
+\section{方法}
+
+
+\subsection{近接２粒子ホログラムの検証実験}
+式(\ref{th:stripepattern})に示した関係が正しく成り立ち，この関係によって縞パターンから粒子組の近接状態を正しく決定できることを実験によって検証する．実験装置の概念図をFig. \ref{fig:stripePatternExperiment}に示す．本実験では，直径\SI{250}{\um}の円形ドットが印刷されたガラスプレートを２枚用いて粒子間距離 $(\Delta \xi, \Delta \eta )$ を操作し，それぞれの粒子ホログラムのスペクトル分布から粒子間距離を推定する．Table \ref{table:stripePatternExperiment}に実験条件を示す．$y$ 軸方向の粒子間距離は常に $\Delta \eta = \SI{0}{\um}$ とし，$x$軸方向の粒子間距離 $\Delta \xi$ をマイクロメータで操作する．また，本実験では粒子間の$z$軸方向距離が\num{0}であると仮定する．そのために，接着した２枚のガラスプレートの間には，屈折率 \num{1.51253} の屈折率マッチングオイル (Immersion Oil Type A, Cargille) を充填し，２枚のガラスプレート間で回折が起こらないようにする． 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/3_Methods/stripe_pattern_experiment.pdf}
+    \caption{Schematic diagram of experimental setup. The $x$-axis distance between dots is varied by manipulating one of the two glass plates with dots printed on them with a micrometer. The printing surfaces of the glass plates are fixed facing each other. The space between the plates is filled with refractive index matching oil (Immersion Oil Type A, Cargille, Refractive Index: 1.51253) to prevent diffraction caused by the gap between them.}
+    \label{fig:stripePatternExperiment}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Experimental conditions to verify the relationship between the stripe pattern formed on the spectral distribution of particle holograms and the distance between particles.}
+    \label{table:stripePatternExperiment}
+    \begin{tabular}{lll}
+    Quantity                               & Value                                             & Unit     \\ \hline \hline
+    Dot diameter $2a$                      & 250                                               & \si{\um} \\ \hline
+    Dot distance in $x$-axis $\Delta \xi$  & Every 10 from 0 to 500, every 50 from 500 to 1000 & \si{\um} \\ \hline
+    Dot distance in $y$-axis $\Delta \eta$ & 0                                                 & \si{\um} \\ \hline 
+    Recorded wavelength $\lambda$          & 632.8                                             & \si{\nm} \\ \hline
+    Propagated distance $z_0$              & 250                                               & \si{\mm} \\ \hline
+    Pixel pitch of hologram $\Delta x$     & 10                                                & \si{\um}
+    \end{tabular}
+\end{table}
+
+
+\subsection{水滴近接検出モデルの学習と推論}\label{sec:EffNetV2}
+この節では，\ref{sec:twoParticleHologramFeature}節で示した近接粒子ホログラムのスペクトル分布上に現れる縞パターンを検出するための畳み込みニューラルネットワークモデルを構築・学習および評価するための方法について示す．
+
+\subsubsection{学習データ生成}
+\ref{sec:in-lineHolography}および\ref{sec:twoParticleHologramFeature}節で示したように，粒子ホログラムは数値生成が可能である．本論文ではモデル学習のために数値生成したホログラムデータを用いる．生成するデータの諸条件をTable \ref{table:trainingData}に示す．
+
+\begin{table}[H]
+    \centering
+    \caption{Conditions for generating hologram data for model training.}
+    \label{table:trainingData}
+    \begin{tabular}{lll}
+    Quantity & Value & Unit \\ \hline \hline
+    Hologram image size & $\num{256} \times \num{256}$ & \si{pixel\squared} \\ \hline
+    Pixel pitch & \num{10} & \si{\um} \\ \hline
+    Mean particle diameter & \num{85} & \si{\um} \\ \hline 
+    Standard deviation of particle diameter & \num{23} & \si{\um} \\ \hline
+    Particle number & up to 3 in positive condition & - \\
+    & up to 8 in negative condition & - \\ \hline
+    Generated holograms & \num{1000000} for each condition & - \\ \hline
+    Propagated distance & \num{220} to \num{270} & \si{\mm} \\ \hline
+    Recorded wavelength & \num{632.8} & \si{\nm} \\ \hline
+    \end{tabular}
+\end{table}
+
+記録されたホログラムのうち，接近粒子組を含むものを positive 条件，接近粒子組を含まないものを negative 条件として分類する．Positive ホログラムには，接近する２つの粒子と余分な１つの粒子を含む３つまでの粒子が記録される．Negative ホログラムには，接近する粒子組を含まない８つまでの粒子が記録される．すべてのホログラムは，人為的に配置される近接粒子組以外の粒子はすべて互いに離れて配置される．本論文におけるPositiveデータの近接距離しきい値は以下によって定める．
+\begin{equation}
+    なにかしらの近接条件式
+\end{equation}
+この近接しきい値は，
+
+
+以上の条件に従って生成したデータの例とそのスペクトル分布をFig. \ref{fig:trainingData}に示す．Positi
+ve データのスペクトル分布には粒子近接に伴う縞パターンが現れており，Negative データのスペクトル分布には縞パターンは現れないことを確認できる．
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{example-image-a}
+        \caption{Positive hologram}
+        \label{fig:trainingData:posiholo}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{example-image-a}
+        \caption{Negative hologram}
+        \label{fig:trainingData:negaholo}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{example-image-a}
+        \caption{Positive hologram spectrum}
+        \label{fig:trainingData:posispec}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{example-image-a}
+        \caption{Negative hologram spectrum}
+        \label{fig:trainingData:negaspec}
+    \end{subfigure}
+
+    \caption{Example of generated holograms and their spectrum for training. Holograms are generated with the conditions shown in Table \ref{table:trainingData}, and the hologram spectrum is calculated by Fourier transform, logarithmically converted, and normalized.} 
+    \label{fig:trainingData}
+\end{figure}
+
+数値生成したデータのみによる学習では，ノイズを含む実験データに対するモデルの推論性能が低下する可能性がある．そこで，後に実際に推論を行う実験データの背景ノイズを数値生成したデータに付与する．背景ノイズは，Table \ref{table:backgroundnoisecondition}に示す撮影条件で得た高速度画像を背景除去して得る時間列データから得る．ある背景ノイズデータの輝度値分布をFig. \ref{fig:backgroundnoise}に示す．
+
+\begin{table}[H]
+    \centering
+    \caption{Conditions for generating background noise data.}
+    \label{table:backgroundnoisecondition}
+    \begin{tabular}{lll}
+    Quantity & Value & Unit \\ \hline \hline
+    Image size & $\num{256} \times \num{256}$ & \si{pixel\squared} \\ \hline
+    Pixel pitch & \num{10} & \si{\um} \\ \hline
+    Particle number & 0 & - \\ \hline
+    Recorded wavelength & \num{632.8} & \si{\nm} \\ \hline
+    \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{example-image-a}
+    \caption{Light intensity distribution of background noise data.}
+    \label{fig:backgroundnoise}
+\end{figure}
+
+\subsubsection{モデル構築および学習}
+この節では，Pytorch\cite{paszke2019}とPytorch Image Models (timm)\cite{rw2019timm}を用いてモデルを構築し，学習を行う方法について示す．Table \ref{table:EffNetV2}にEfficientNetV2-XLモデルの構成を示す\cite{tan2021}．図中 Conv2d は\ref{sec:convolutionalLayer}で示した基本的な畳み込み層を示す．Skip connectionはResNet\cite{he2016}で示されたスキップ接続である．SEは Squeeze-and-Excitation \cite{hu2018} を示す．MBConv\cite{tan2019}やFused-MBConv\cite{tan2021}は，Expansion ratioによって増加させた畳み込み層のチャネル数を再びSEによってもとの次元に減少させてモデルの表現能力を向上させる．Stage 6までの畳み込み層の出力はStage 7 で一次元化(Flatten)され，Stage 8 で２クラス分類を行う全結合層(FC)に入力される．全結合層は出力次元が100,10,2の３層からなり，前の２層でBatch Normalization\cite{ioffe2015}とReLU\cite{nair2010}を適用する．最終層はSigmoid関数を適用する．
+\begin{table}[H]
+    \centering
+    \caption{EfficientNetV2-XL model architecture.}
+    \label{table:EffNetV2}
+    \begin{tabular}{lllllll}
+    Stage & Operator & Kernel size & Stride & Channels & Layers & Other option \\ \hline \hline
+    0 & Conv2d & 3 & 1 & 32 & 4 & Skip connection \\ \hline
+    1 & Fused-MBConv & 3 & 2 & 64 & 8 & Expansion ratio 4 \\ \hline
+    2 & Fused-MBConv & 3 & 2 & 96 & 8 & Expansion ratio 4 \\ \hline
+    3 & MBConv & 3 & 2 & 192 & 16 & Expansion ratio 4, \\ &&&&&& SE ratio 0.25  \\ \hline
+    4 & MBConv & 3 & 1 & 256 & 24 & Expansion ratio 6, \\ &&&&&& SE ratio 0.25  \\ \hline
+    5 & MBConv & 3 & 2 & 512 & 32 & Expansion ratio 6, \\ &&&&&& SE ratio 0.25  \\ \hline
+    6 & MBConv & 3 & 1 & 640 & 8 & Expansion ratio 6, \\ &&&&&& SE ratio 0.25  \\ \hline
+    7 & Flatten & - & - & 1280 & 1 & - \\ \hline
+    8 & FC & - & - & 2 & 3 & - \\ \hline
+    \end{tabular}
+\end{table}
+
+本研究で用いるEfficientNetV2-XLモデルはImageNet-21k\cite{krizhevsky2012}で事前学習したものを用いるため，モデルのStage 7までの畳み込み層は転移学習ではパラメータ更新しない．Stage 8 の全結合層のパラメータだけを学習する．モデルの損失関数は交差エントロピー誤差\cite{bishop2006}を，最適化手法はAdam\cite{kingma2015}を用いる．学習率は初期値\num{6e-5}で，学習率減衰は\num{0.7}を用いて，学習率減衰のタイミングは学習のエポック数が\num{3}の倍数のときに行う．この手法はPytorchでStepLRとして提供される．モデルの学習は，学習データのうち\num{5}\%を検証データとして用いる．学習はGPUを用いて行う．
+
+\subsubsection{モデル評価}
+学習したモデルの評価方法について示す．Table \ref{table:evalclass}に，モデルの推論結果と実際のラベルの組み合わせによって分類される分類クラスを示す．これらのラベルを用いて，モデルの評価指標としてAccuracy，Precision，Recallを以下に定義する．
+\begin{align}
+    Accuracy &= \frac{TP + TN}{TP + FP + FN + TN} \\
+    Precision &= \frac{TP}{TP + FP} \\
+    Recall &= \frac{TP}{TP + FN}
+\end{align}
+Accuracyは主にデータのPositive-Negative比が１に近い場合によく用いられる評価指標である．PrecisionはPositiveと予測したデータのうち，実際にPositiveであるデータの割合を示す．Recallは実際にPositiveであるデータのうち，Positiveと予測されたデータの割合を示す．PrecisionやRecallはデータのPositive-Negative比が１から大きく異なる場合にも用いることができる．これらの評価指標は，モデルの推論結果から予測ラベルをPositiveとするためのしきい値によって変化する．モデルは，データがPositiveである確度(Confidence)を0から1の実数で表現するため，この範囲の変化するしきい値に対してPrecision，Recallを計算し，しきい値で対応するこれらの値をPrecision-Recall図にプロットしたものをPrecision-Recall曲線と呼ぶ．Precision-Recall曲線の下の面積をAUC (Area Under Curve)と呼び，モデルの推論性能を示す指標として用いる\cite{saito2015}．
+\begin{table}[H]
+    \centering
+    \caption{Predicted class by model inference and actual label.}
+    \begin{tabular}{c|c | cc}
+        \multicolumn{2}{l|}{\multirow{2}{*}{}}  & \multicolumn{2}{c}{Predicted label} \\ \cline{3-4}
+        \multicolumn{2}{l|}{}                   & Positive         & Negative         \\ \hline 
+        \multirow{2}{*}{True label} & Positive & TP               & FN               \\ \cline{2-4}
+                                    & Negative & FP               & TN              
+        \end{tabular}
+    \label{table:evalclass}
+\end{table}
+
+
+\subsection{時系列水滴ホログラムの撮影実験}
+\ref{sec:EffNetV2}節で構築したモデルを用いて，実験で撮影した時系列水滴ホログラムから近接水滴組を抽出する．この節では，時系列水滴ホログラムの記録方法について示す．実験で用いた水滴噴霧装置と光学系をFig. \ref{fig:dropletSpray}に示す．また，記録条件をTable \ref{table:dropletSprayCondition}に示す．本実験では，２つのネブライザ (EW-KA 30, Panasonic) から噴霧した水滴が衝突する領域を２台の高速度カメラ(FASTCAM Mini UX100 type 800K-M-16G, Photron)で撮影する．観測領域からカメラまでの光伝搬距離を変化させ２枚のホログラムを記録することで\ref{sec:phaseRetrieval}節で示した位相回復を行う．カメラに装着したテレセントリックレンズ(VS-LTC1-130/FS, VS Technology)によって平行光をイメージセンサに記録することができる．観測領域で一様等方性乱流を発生させる８つのファンは，すべて定格の\SI{12}{\V}で駆動する．本来は観測領域で適切に一様等方性乱流場が発生しているか検証する必要があるが，本論文ではその検証は行わず，将来の課題とする．
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/3_Methods/dropletspraysystem.pdf}
+    \caption{Schematic diagram of droplet spray device and optical system; expanded and collimated He-Ne laser beam illuminates the droplet spray, and the holograms are recorded by two high-speed cameras with telecentric lenses. Eight DC fans are used to generate a uniformly isotropic turbulent field in the observation area.}
+    \label{fig:dropletSpray}
+\end{figure}
+
+\begin{table}[H]
+    \centering
+    \caption{Conditions for recording holograms of droplet spray.}
+    \label{table:dropletSprayCondition}
+    \begin{tabular}{lll}
+    Quantity & Value & Unit \\ \hline \hline
+    Hologram image size & $\num{1024} \times \num{1024}$ & \si{pixel\squared} \\ \hline
+    Pixel pitch & \num{10} & \si{\um} \\ \hline
+    Recorded wavelength & \num{632.8} & \si{\nm} \\ \hline
+    Propagated distance $z_1$ & \num{220} & \si{\mm} \\ \hline
+    Propagated distance $\Delta z$ & \num{110} & \si{\mm} \\ \hline
+    Exposure time & \num{250} & \si{\us} \\ \hline
+
+    \end{tabular}
+\end{table}
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\linewidth]{./Figure/3_Methods/beforebundle.pdf}
+    \caption{Schematic diagram of droplet spray device and optical system; expanded and collimated He-Ne laser beam illuminates the droplet spray, and the holograms are recorded by two high-speed cameras with telecentric lenses. Eight DC fans are used to generate a uniformly isotropic turbulent field in the observation area.}
+    \label{fig:beforebundle}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.98\linewidth]{./Figure/3_Methods/afterbundle.pdf}
+    \caption{Schematic diagram of droplet spray device and optical system; expanded and collimated He-Ne laser beam illuminates the droplet spray, and the holograms are recorded by two high-speed cameras with telecentric lenses. Eight DC fans are used to generate a uniformly isotropic turbulent field in the observation area.}
+    \label{fig:afterbundle}
+\end{figure}

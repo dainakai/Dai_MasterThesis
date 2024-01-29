@@ -1,5 +1,5 @@
 \section{理論}
-\subsection{インラインホログラフィによる粒子の記録と３次元再生}
+\subsection{インラインホログラフィによる粒子の記録と３次元再生}\label{sec:in-lineHolography}
 微小物体が存在する３次元空間を通過したコヒーレントな単一波長平行光波は，弱位相物体(weak phase object)による光路長の変化・屈折・反射や，あるいは不透明物体(opaque object)による部分的な遮光・周囲の回折などの作用によって変化する．この光波がさらに光軸方向に伝搬し，ある地点でイメージセンサなどによって光強度として記録されたとき，そのうち特に物体の存在によって生じる干渉・回折パターンをホログラムと呼ぶ．また，記録したホログラムから３次元物体像を復元する技術はホログラフィ\cite{gabor}を呼ばれる．光源・物体・記録媒体がすべて同一軸上にある光学系によるホログラフィは，Gaborによって発明されたことからGaborホログラフィ(Gabor's holography)，あるいはインラインホログラフィ(in-line holography)と呼ばれる．
 
 平面波の光伝搬はコンピュータで計算可能である\cite{kreis}ため，物体が存在する空間を通過して伝搬した光複素振幅を観測できれば，その光を物体が存在していた位置まで逆伝搬することで物体がある位置の複素振幅から物体の分布や形状を測定できる．ホログラムの干渉・回折パターンには，それを記録した地点の複素振幅が含まれる．以下では，コンピュータによる光複素振幅の伝搬計算，インラインホログラフィにおける物体の記録・再生方法について順に示す．
@@ -106,11 +106,12 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
 \end{align}
 ただし， $\tilde{A}$は形状関数のフーリエ変換であり，以下の実数値関数で与えられる．
 \begin{equation}
+    \label{th:fourierOfA}
     \tilde{A}(\alpha,\beta) = \mathcal{F}\left\{ A \right\} = \pi a^2 \frac{2J_1(2\pi a \gamma)}{2\pi a \gamma}
 \end{equation}
 ここで， $\gamma = \sqrt{\alpha^2+\beta^2}$である．式(\ref{th:particleComplexAmplitude})では，以下の形式で用いられる．
 \begin{equation}
-    \label{th:fourierOfA}
+    \label{th:fourierOfA2}
     \tilde{A}\left( \frac{x}{\lambda |z_0|}, \frac{y}{\lambda |z_0|} \right)  =  \pi a^2 \frac{2J_1(2\pi a r/ \lambda |z_0|)}{2\pi a r/ \lambda |z_0|}
 \end{equation}
 ただし， $r=\sqrt{x^2+y^2}$である．結局，式(\ref{th:particleComplexAmplitude})は以下のようになる．
@@ -160,12 +161,58 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
     \label{th:particleReconstruction2}
     &= \left( 1 - A(x,y) \right) + (1 - A(x,y))*h_{2z_0} - e^{\frac{2\pi \mathrm{j}z_0}{\lambda}}
 \end{align}
-ただし，$A(x,y)$が実数値関数であることを用いた．式(\ref{th:particleReconstruction2})の第１項は物体光を，第２項は双画像を，第３項は背景光を表す．双画像はホログラム記録時に位相分布が失われることで生じる．双画像はインラインホログラフィでは原理的に除去できないため，Off-axis法\cite{offaxis}や位相シフト法\cite{phaseshift}，Gerchberg-Saxtonアルゴリズムを用いた位相回復法\cite{phaseretrieval}などが用いられる．
+ただし，$A(x,y)$が実数値関数であることを用いた．式(\ref{th:particleReconstruction2})の第１項は物体光を，第２項は双画像を，第３項は背景光を表す．双画像はホログラム記録時に位相分布が失われることで生じる．双画像はインラインホログラフィでは原理的に除去できず，ノイズとして扱われる．
 
-\subsection{２粒子ホログラムの局所特徴}
+\subsubsection{ホログラフィによる計測精度のボトルネック}\label{sec:holographyBottleNeck}
+前節の最後では，インラインホログラフィにおける像再生において，ホログラム記録時に位相分布が失われることで双画像が生じることを述べた．この節では，ホログラム計測においてその精度や像品質を低下させる典型的な問題である，双画像問題\cite{kats2010}と奥行方向への像伸び問題\cite{meng1995}について述べる．
+
+本研究のように不透明物体を物体面上の形状関数で表現する場合，双画像による影響は再生時の物体輝度値変化として現れる．記録したホログラムを物体面まで逆伝搬して得た再生像スライスをFig. \ref{fig:twinImage:holo}に，その輝度分布を Fig. \ref{fig:twinImage:profile}に示す．Fig. \ref{fig:twinImage:profile}にはさらに，物体面の透過関数プロファイルも併せて示す．透過関数分布では，定義により粒子像の輝度値は0である．しかし，位相情報が失われたGaborホログラムの再生像では，双画像の影響により粒子輝度値が0でなくなる．さらに，双画像のホログラムフリンジも重畳しノイズとして再生像品質を低下させる．
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/twin_image/holo.pdf}
+        \caption{Reconstructed image of Gabor hologram}
+        \label{fig:twinImage:holo}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/twin_image/profile.pdf}
+        \caption{Normalized wave amplitude profile of Gabor hologram and propagated wavefront along the line $y=\SI{0}{\um}$ }
+        \label{fig:twinImage:profile}
+    \end{subfigure}
+
+    \caption{Example of a reconstructed image slice of Gabor hologram and its wavefront irradiance profile. The hologram is recorded at $z=\SI{80}{\mm}$, and the image slice is reconstructed at $z=\SI{0}{\mm}$. The particle radius is $a=\SI{50}{\um}$, and the recording wavelength is $\lambda = \SI{632.8}{\nm}$. The reconstructed particle image of the Gabor hologram does not have an amplitude of zero.}
+    \label{fig:twinImage}
+\end{figure}
+
+次に，奥行方向への像伸び問題について述べる．記録ホログラムを再生して粒子座標を取得するとき，一般に粒子の奥行方向位置 $z_0$ は未知である．したがって，$x$-$y$ 投影像における粒子周辺の輝度分布の$z$ 軸プロファイルから $z_0$ を推定する必要がある．式(\ref{th:particleShapeFunction})に示す形状関数 $A$ で定義される粒子の $z$ 軸輝度プロファイルは，以下で与えられる\cite{born1970,tanaka2024}．
+\begin{equation}
+    \label{th:particleZprofile}
+    I_z(z) := \left| \psi(0,0;z) \right|^2 \approx \left[ 1 + \cos{\left( \frac{\pi r_p^2}{\lambda z} \right)} \right]^2 + \sin^2{\left( \frac{\pi r_p^2}{\lambda z} \right)}
+\end{equation}
+Gaborホログラムの再生像のz軸輝度プロファイルと，式(\ref{th:particleZprofile})によるプロットをFig. \ref{fig:particleZprofile}に示す．
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/zprofile.pdf}
+    \caption{Normalized $z$-axis irradiance profile of Gabor hologram and theoretical plot of Eq. (\ref{th:particleZprofile}). The hologram is recorded at $z = \SI{0}{\um}$, particle radius is $a=\SI{50}{\um}$, and the recording wavelength is $\lambda = \SI{632.8}{\nm}$. The same system used in Fig. \ref{fig:twinImage} is used for this calculation.}
+    \label{fig:particleZprofile}
+\end{figure}
+式(\ref{th:particleZprofile})に示すプロファイルの，粒子$z$座標$z=0$に対して対象な零点間距離 $\Delta L$ は以下で与えられる\cite{nakatani2019}．
+\begin{equation}
+    \label{th:elongationLength}
+    \Delta L = \frac{4r_p^2}{2(2n-1)\lambda}, \quad (n=1,2,3,\cdots)
+\end{equation}
+記録時に位相情報を失うインラインホログラフィによる再生では，$n=1$ は理論値を再現するもののそれより大きい $n$ では異なる．特に，$z=0$ における輝度値が双画像問題により0でなくなるため像抽出が困難になる．もし位相分布を復元してホログラムを再生できれば，後に示すように $n=0$ を中心として輝度値が 0 となる領域を抽出することができ，この領域に対する画像処理で粒子座標 $z$ を推定することができる．
+
+
+双画像の影響は，再生波面から共役像項を除去したり，記録波面の位相分布を再生するなどして除去される．このために，Off-axis法\cite{offaxis}や位相シフト法\cite{phaseshift}，Gerchberg-Saxtonアルゴリズムを用いた位相回復法\cite{phaseretrieval}などが用いられる．本研究では，後に示すように２台のカメラを用いた位相回復ホログラフィによってこれに対処する．
+
+
+\subsection{２粒子ホログラムの局所特徴}\label{sec:twoParticleHologramFeature}
 この節では，中心座標が $(x_{p1},y_{p1},z_{p1})$，半径 $a_1$ の粒子1と，中心座標が$(x_{p2},y_{p2},z_{p2})$，半径 $a_2$ の粒子2が近接したときに記録されるホログラフィックパターンの局所特徴について述べる．局所特徴とは画像上のある領域における幾何的な特徴を指す．すなわち，\ref{sec:holographicReconstruction}節で示したホログラムの３次元再生を行わず，ホログラムの画像としての特徴から直接粒子組の近接状態を識別することを目的とする．
 
-はじめに，以下の条件を前提とする．
+\subsubsection{同径かつ奥行方向距離を持たない２粒子のホログラムとそのスペクトル分布}\label{sec:twoParticleHologram}
+最も単純な場合として，２粒子が同じ半径 $a$ を持ち，かつ$z$軸方向距離を持たない場合を考える．すなわち，以下の条件を満たす．
 \begin{align}
     \sqrt{(x_{p1}-x_{p2})^2+(y_{p1}-y_{p2})^2} > a_1+a_2  \quad &\text{条件1: 点間の距離が半径の和より大きい} \\
     a_1 = a_2 \quad &\text{条件2: 二つの半径が等しい} \\
@@ -248,19 +295,233 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
     \label{th:2particleSpectrum}
     &= \left| \tilde{A} \right|^2 \cos^2{\left( \pi \lambda z_0 \gamma^2 \right)} \cos^2{\left( \pi \left( \alpha \Delta \xi + \beta \Delta \eta \right) \right)}
 \end{align}
+ここで，式(\ref{th:2particleSpectrum})の各因数の寄与を調べるために，数値生成したホログラムの例，ホログラムのスペクトル分布，同条件の式(\ref{th:2particleSpectrum})のプロットをFig. \ref{fig:2particleSpectrum}に示す．Fig. \ref{fig:2particleSpectrum:a}に示す物体面面像から式(\ref{th:lightProp_angularSpectrum})に示す光伝搬を用いてホログラムFig. \ref{fig:2particleSpectrum:b}を記録する．Fig. \ref{fig:2particleSpectrum:c}に示すスペクトルは，Fig. \ref{fig:2particleSpectrum:b}に対する高速フーリエ変換で得たものである．Fig. \ref{fig:2particleSpectrum:d}に示すスペクトルは，式(\ref{th:2particleSpectrum})を用いて計算したものである．式(\ref{th:2particleSpectrum})の因数 $\left| \tilde{A} \right|^2$ は，スペクトル分布において周期が変化しない同心円パターンとして現れている．これは，式(\ref{th:fourierOfA})に示す通り伝搬距離 $z_0$ に依存しないため，粒子の伝搬距離の変化に対してこのパターンは変化しない．Fig. \ref{fig:2particleSpectrum:d}では同心円パターンとして現れているが，Fig. \ref{fig:2particleSpectrum:c}では矩形領域に対する離散フーリエ変換の影響でパターンが歪んでいる．因数 $\cos^2{\left( \pi \lambda z_0 \gamma^2 \right)}$ は，スペクトル分布で確認できる残りの同心円パターンとして現れており，座標中心から離れるほど周期が短くなる．このパターンは，例に示す $z_0 = \SI{20}{\mm}$ 程度の小さな伝搬距離であれば確認できるが，一般的な記録条件で用いる伝搬距離ではエイリアシングによって確認できなくなる．最後に，因数 $\cos^2{\left( \pi \left( \alpha \Delta \xi + \beta \Delta \eta \right) \right)}$ はスペクトル分布の縞パターンを表す．このパターンは粒子組の平面内距離 $\Delta \xi$，$\Delta \eta$ に依存し，またこれらのみに依存するため，縞パターンの法線ベクトルから平面内距離を一意に決定できる．本節では同径かつ奥行方向距離を持たない２粒子のホログラムについて調べたが，半径が異なる場合，奥行方向距離を持つ場合のホログラフィックパターンについては付録\ref{sec:appendix_deviation}で述べる．
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/spectrum_example/a.pdf}
+        \caption{Object plane}
+        \label{fig:2particleSpectrum:a}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/spectrum_example/b.pdf}
+        \caption{Recorded hologram}
+        \label{fig:2particleSpectrum:b}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/spectrum_example/c.pdf}
+        \caption{Computationally calculated spectrum of the hologram Fig. \ref{fig:2particleSpectrum:b}}
+        \label{fig:2particleSpectrum:c}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/spectrum_example/d.pdf}
+        \caption{Spectrum of the hologram Fig. \ref{fig:2particleSpectrum:b} calculated by Eq. (\ref{th:2particleSpectrum})}
+        \label{fig:2particleSpectrum:d}
+    \end{subfigure}
+
+    \caption{Example of a hologram and its spectrum. The radii of particles are $a_1 = a_2 = \SI{50}{\um}$. The propagation distance is $z_0 = \SI{20}{\mm}$. The distance between the centers of the particles is $\Delta \xi = \Delta \eta = \SI{100}{\um}$. The wavelength of the light is $\lambda = \SI{532}{\nm}$. The number of discrete points per side of the rectangular area to be Fourier transformed is 1024, and the pixel pitch is \SI{10}{\um}.} 
+    \label{fig:2particleSpectrum}
+\end{figure}
+
+\subsubsection{離散スペクトル分布の縞パターンによる平面内距離の決定}
+縞パターンの向き・および周期と平面内距離の関係が一意であることを\ref{sec:twoParticleHologram}節で示した．この節では，２粒子ホログラム画像のスペクトル分布上に現れる縞パターンから，粒子組の平面内距離 $(\Delta\xi,\Delta\eta)$ を決定する方法を示す．Fig. \ref{fig:stripePatternVector}に示すように縞パターンの状態を定義する．図中$\alpha$，$\beta$軸に沿って定義される離散点間隔 $l,\,m \mathrm{[pixel]}$ は，各軸の縞間隔である．図中では軸の次元と一致させるためにフーリエ変換を施す矩形領域一辺のピクセル長 $L \mathrm{\,[pixel]}$ とピクセルピッチ $\Delta x \mathrm{\,[\si{\um}]}$ の積で除している．
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/stripe_pattern.pdf}
+    \caption{Schematic diagram defining the orientation and spacing of the stripe pattern using the displacements $l$ and $m$ along the $\alpha$ and $\beta$ axes. The displacement along each axis determines the characteristics of the stripe pattern and corresponds uniquely to the proximity state of the two particles}
+    \label{fig:stripePatternVector}
+\end{figure}
+
+離散格子座標 $(x_i,y_i)$，$(\alpha_i.\beta_j)$ は，以下の関係を満たす．
+\begin{align}
+    \left( x_i, y_j \right) &= \left( i \Delta x, j \Delta x \right) \\
+    \left( \alpha_i, \beta_j \right) &= \left( \frac{i}{L\Delta x}, \frac{j}{L\Delta x} \right)
+\end{align}
+以上の関係と，縞パターンの位相周期が $\pi$ であること，粒子組の接近角度と縞パターンの角度が等しいことから，以下の関係が成り立つ．
+\begin{gather}
+    \pi \left( \frac{l}{L\Delta x} \Delta \xi + \frac{m}{L\Delta x} \Delta \eta \right) = \pi \\
+    \frac{\Delta \eta}{\Delta \xi} = \frac{m}{l}
+\end{gather}
+したがって，以下の関係を導出できる\cite{aem2023}．
+\begin{equation}
+    \label{th:stripepattern}
+    \Delta \xi = \frac{lL\Delta x}{l^2+m^2}, \hspace{5mm} \Delta \eta = \frac{m L\Delta x}{l^2+m^2}
+\end{equation}
+$l$ および $m$ は $2 \leq l, m < L$ を満たす必要があるため，測定可能な平面内距離は以下の範囲に限られる．
+\begin{equation}
+    \Delta x \leq \Delta \xi < \frac{L\Delta x}{4}, \hspace{5mm} \Delta x \leq \Delta \eta < \frac{L\Delta x}{4}
+\end{equation}
+
+\subsection{畳み込みニューラルネットワークによる局所特徴識別}\label{sec:convolutionalNeuralNetwork}
+\ref{sec:twoParticleHologramFeature}節において，近接粒子組のホログラムをそのスペクトル分布の局所特徴から識別可能であることを示した．本論文では，この原理を用いて，畳み込みニューラルネットワーク(Convolutional Neural Network: CNN)\cite{lecun1998}をベースとした画像認識モデルによって近接粒子組の識別を行う．このために本節では，画像認識モデルの学習・推論の原理と基本的な構造について示す．\ref{sec:supervisedClassification}節から\ref{sec:convolutionalLayer}までは機械学習の代表的なテキストであるBishop (2006)による\cite{bishop2006}．
+
+\subsubsection{教師あり分類モデルの学習・推論}\label{sec:supervisedClassification}
+教師あり分類モデルは，与えられたデータ $\bm{x}_i$ に対してそれが属する分類のクラス $C_k$ を推定する．本研究において，データのクラス数 $K$ はつねに2である．一般に深層学習を用いる識別モデルでは，データの正解ラベル $\bm{t}_i$，すなわちモデルが学習の後の推定結果として出力するのが望ましいデータは$K$次元ベクトルであり，例えばクラス1に属するデータの正解ラベルは以下のように表現される．
+\begin{equation}
+    \bm{t} = \left( 1, 0 \right)^\mathrm{T}
+\end{equation}
+実際のモデルの出力 $\bm{y}_i$ は，データがクラス1に属する確率 $p(C_1|\bm{x}_i)$ とクラス2に属する確率 $p(C_2|\bm{x}_i)$ を用いて以下のように表現される．
+\begin{equation}
+    \bm{y}_i = \left( p(C_1|\bm{x}_i), p(C_2|\bm{x}_i) \right)^\mathrm{T}
+\end{equation}
+$p(C_k|\bm{x}_i)$は，データ $\bm{x}_i$ 与えられた場合にそれがクラス $C_k$ に属する条件付き確率であり，データのクラス$C_k$の事後分布とも呼ばれる．これらは定義により以下の関係を満たす．
+\begin{equation}
+    \sum_{k=1}^K p(C_k|\bm{x}_i) = 1
+\end{equation}
+結局，教師あり分類モデルは，データ $\bm{x}_i$ に対してそのラベル $\bm{t}_i$ に十分近い出力 $\bm{y}_i$ を得るための関数 $f$ を決定する問題として定式化できる．
+\begin{equation}
+    \bm{y}_i = f(\bm{x}_i)
+\end{equation}
+$f$として3層のロジスティック回帰を用いる．各層$j = 1,2,3$の出力ベクトルを $\bm{\phi}_j$ とすると，各層について以下が成り立つ．
+\begin{align}
+    \bm{\phi}_1 &= \bm{x}_i \\
+    \bm{\phi}_2 &= \sigma(\bm{W}_1 \bm{\phi}_1 + \bm{b}_1) \\
+    \bm{\phi}_3 &= \sigma(\bm{W}_2 \bm{\phi}_2 + \bm{b}_2) \\
+    \bm{y}_i &= \bm{\phi}_3
+\end{align}
+$\bm{W}_j$は$\mathrm{dim}\bm{\phi}_{j+1}\times \mathrm{dim}\bm{\phi}_{j}$型の係数行列を表し，$\bm{b}$は各層のバイアスベクトルを表す．$\sigma$はシグモイド関数であり，以下で定義される．
+\begin{equation}
+    \sigma(x) = \frac{1}{1+\exp{(-x)}}
+\end{equation}
+このように，入力層 $\bm{\phi}_1$，中間層 $\bm{\phi}_2$，出力層 $\bm{\phi}_3$ からなるモデルを順伝播型ニューラルネットワークと呼ぶ．このようなモデルは，中間層の出力ベクトル $\bm{\phi}_2$の次元を十分大きく取れば $f$と同型の任意の非線形関数を近似することができることが知られている\cite{cybenko1989}．実際の深層学習モデルでは中間層は１層ではなく複数の層からなる場合があり，さらに活性化関数としてシグモイド関数ではなくReLU関数\cite{nair2010}などを用いる場合があるが，これらは計算の効率化や学習の安定化のための工夫であり，本質的には同じモデルである．
 
 
+このモデルの学習は，データ $\bm{x}_i$ と正解ラベル $\bm{t}_i$ を用いて，以下の損失関数 $E$ を最小化することで行われる．
+\begin{equation}
+    \label{th:lossFunction}
+    E(\bm{W}_1,\bm{W}_2,\bm{b}_1,\bm{b}_2) = -\sum_{i=1}^N \sum_{k=1}^K t_{ik} \ln{y_{ik}}
+\end{equation}
+上式は交差エントロピー誤差と呼ばれ，二項分類問題における標準的な損失関数である．$N$はデータ数である．この損失関数を最小化するパラメータ $\bm{W}_1,\bm{W}_2,\bm{b}_1,\bm{b}_2$ を求めるために，勾配降下法を用いる．勾配降下法は，損失関数の勾配を用いて，パラメータを以下のように更新する．
+\begin{equation}
+    \bm{W}_j \leftarrow \bm{W}_j - \eta \frac{\partial E}{\partial \bm{W}_j}, \hspace{5mm} \bm{b}_j \leftarrow \bm{b}_j - \eta \frac{\partial E}{\partial \bm{b}_j}
+\end{equation}
+上式は更新率$\eta $をパラメータに取る最も単純な勾配降下式であるが，実際の深層学習モデルではAdam\cite{kingma2015}などの高度な勾配降下法が用いられる．勾配降下法によるパラメータ更新を繰り返すことで，損失関数を最小化するパラメータを求めることができる．
 
 
+\subsubsection{畳み込み層による特徴抽出}\label{sec:convolutionalLayer}
+画像などの２次元データに対して，ロジスティック回帰層を重ねて得られる全結合ニューラルネットワークを用いて識別を行うと，所望の精度を得るために必要なパラメータ数が非常に多くなる．画像の局所特徴を効率よく抽出する仕組みとして畳み込み層\cite{lecun1998}が提案され，これを用いた画像認識モデルであるAlexNet\cite{krizhevsky2012}が高い性能を示したことで現在に至るまで画像認識モデルの基本的な構造として用いられている．画像認識モデルでは，入力層に近い層で複数の畳み込み層による処理が行われ，特徴抽出・次元削減が行われた後，全結合層に接続し識別を行う．本節では，畳み込み層の原理と構造について示す．
+
+畳み込み層における処理は，カーネルによる畳み込み計算，活性化関数による非線形化，部分サンプリングで構成される．カーネルはカーネルサイズを $L_{k}$ として $L_k \times L_k$ の実数配列であり，二次元データ $\bm{X}_i$ のすべての可能な $L_k \times L_k$ サイズの部分配列と要素ごとの積和を計算する．これらを並べてできる二次元配列 $\bm{Y}_i$ が出力のあるチャネル部分に相当する．データ $\bm{X}_i$ の一辺のデータ数を $L$ としたとき，チャネル出力 $\bm{Y}_i$ の一辺のデータ数は $L-L_k+1$ となるか，あらかじめデータ $\bm{X}_i$ の境界を$L_k$ だけゼロパディングしておくことで $L$ となる．カーネル演算の後に$\bm{Y}_i$と同型のバイアス配列を加える場合もある．これに活性化関数を適用することで，出力 $\bm{Y}_i$ の各要素は以下のように表現できる．
+\begin{equation}
+    \bm{Y}_i = \sigma \left( \bm{W} \ast \bm{X}_i + \bm{A} \right)
+\end{equation}
+ひとつの畳み込み層では一般に複数のカーネルを定義し，それぞれのカーネルによる畳み込み計算を行う．畳み込み層への入力データのチャネル数を $C$，カーネル数を $n$ とすると，入力データ・出力データの関係はFig. \ref{fig:convolutionalLayer}に示すようになる．
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/cnn.pdf}
+    \caption{Schematic diagram of a convolutional layer. The input data $\bm{X}_i$ is a $C\times L \times L$ array, and the output data $\bm{Y}_i$ is a $C\times n\times (L-L_k+1) \times (L-L_k+1)$ array.}
+    \label{fig:convolutionalLayer}
+\end{figure}
+
+多くの畳み込みニューラルネットワークでは，畳み込み層のあとにプーリング層を挿入する．プーリング層は，入力データの局所的な特徴を保持しつつデータのサイズを小さくするために用いられる．プーリング層では，入力データの局所的な特徴を保持するために，入力データの局所的な領域に対して最大値や平均値を計算する．これらの演算は，入力データのチャネルごとに行われる．プーリング層の出力データのチャネル数は入力データのチャネル数と同じである．プーリング層の出力データのサイズは，入力データのサイズをプーリングサイズで割った商である．最もよく用いられるプーリング処理としてMax-Pooling\cite{nagi2011}がある．これは，入力データの局所的な領域に対して最大値を計算しその領域の代表値とする処理である．$2\times 2$のMax-Poolingを行う場合，出力データのサイズは入力データの半分になる．
 
 
+\subsubsection{先進的な画像認識モデルとその構造}
+AlexNet\cite{krizhevsky2012}の登場以降，VGG (2015)\cite{simonyan2015}，ResNet (2016)\cite{he2016}，Vision Transformer (2021)\cite{dosovitskiy2021}，EffcientNetV2 (2021)\cite{tan2021}などの代表的な画像認識モデルが提案されている．VGGは畳み込み層を用いた大きなモデルの実装により現在でも多くの物体検出モデルの基幹モデルとして採用されている．ResNetはニューラルネットワークの隣接しない層同士を接続するSkip connectionの導入によって大きく精度を向上させた．Vision TransformerはCNNベースではなくTransformer\cite{vaswani2017}ベースのモデルだが，現在に至るまで画像認識モデルの性能評価の基準として用いられている．EfficientNetV2は再びCNNベースのモデルであり，現在のState-of-the-artなモデルとしてデファクトで用いられている．本研究でも，EffcientNetV2を用いて画像認識を行う．
+
+これらのモデルに共通する特徴として，公開されている大規模画像データベースであるImageNet\cite{deng2009}による事前学習を行い，その後識別したいドメインのデータで学習を行っている点である．ImageNetは，\num{21000}クラス以上，\num{1400}万枚の画像からなるデータベースであり，設計したモデルをImageNetで事前学習することで，畳み込み層のパラメータは像の局所特徴を抽出するように最適化される．事前学習したモデルの畳み込み層部分を切り取りその末尾に全結合層を追加し，識別したいドメインのデータで学習を行うことで，識別したいドメインのデータに特化したモデルを得ることができる．これを転移学習\cite{zhuang2020}という．本研究でも，ImageNetで事前学習したEfficientNetV2を用いて転移学習を行う．モデルの構成，学習データ生成，学習方法などの詳細については\ref{sec:EffNetV2}節で示す．
 
 
+\subsection{位相回復ホログラフィによる水滴像の3次元再生}
+この節では，近接粒子の近接検出を行う画像認識モデルを用いて抽出された近接粒子組ホログラムに対して実際に光伝搬計算による３次元像再生を行うときに用いる位相回復ホログラフィについて説明する．まず，位相回復ホログラフィの原理について示し，次に\ref{sec:holographyBottleNeck}節で示したGaborホログラフィによる再生像品質の低下が改善されることを示す．最後に，改善した粒子輝度値の奥行方向プロファイルから粒子の奥行方向位置を決定する手法について示す．
 
-\subsection{位相回復ホログラフィ}
+\subsubsection{位相回復ホログラフィの原理}\label{sec:phaseRetrieval}
+位相回復ホログラフィ\cite{phaseretrieval}では，物体面からの伝搬距離が異なる二枚のインラインホログラム，すなわち光強度分布を用いて失われた位相分布を復元する\cite{zhang2003,tanaka2016}．このために，同光軸上の２カメラで記録されたホログラムに対してGerchberg-Saxtonアルゴリズム\cite{gerchberg1972}を適用する．物体面から記録面1までの伝搬距離を $z_1$，さらに記録面1から記録面2までの伝搬距離を $\Delta z$ としたときの物体面と各記録ホログラムの関係をFig. \ref{fig:phaseRetrievalOptics}に示す．
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/pralignment.pdf}
+    \caption{Optical system for phase retrieval holography. The object plane is located at $z = 0$. The distance between the object plane and the first recording plane is $z_1$, and the distance between the first and second recording planes is $\Delta z$.}
+    \label{fig:phaseRetrievalOptics}
+\end{figure}
+位相分布ホログラフィでは，以下の反復計算によって記録面1における複素振幅 $\psi_1$ を復元する．ここで，各記録面$i=1,2$におけるホログラムを$I_i$，$n$回目の反復計算で得た複素振幅を $\psi_i^n$，位相分布を $\phi_i^n$ とし，これらの初期条件$\psi_1^1$および$\phi_1^1$を以下で定める．
+\begin{equation}
+    \phi_1^1 = 0,  \quad \psi_1^1 = \sqrt{I_i} \exp{(i\phi_i^0)}
+\end{equation}
+以下の計算ステップに従い $\phi_1^n$ を得る．
 
 
-\subsection{畳み込みニューラルネットワークによる局所特徴識別}
+\paragraph{STEP 1:}
+\begin{equation}
+    \psi_2^n = \psi_1^n * h_{\Delta z}
+\end{equation}
+\begin{equation}
+    \phi_2^{n} = \arctan{\left( \frac{\Im \psi_2^n}{\Re \psi_2^n} \right)}
+\end{equation}
+$\psi_1^n$を記録面2の位置まで伝搬した複素振幅を$\psi_2^n$とする．$\psi_2^n$を用いて記録面2における位相分布 $\phi_2^n$ を計算する．
 
+\paragraph{STEP 2:}
+\begin{equation}
+    \psi_2^n = \sqrt{I_2} \exp{(\mathrm{j}\phi_2^n)}
+\end{equation}
+STEP 1で得た位相分布 $\phi_2^n$ を用いて記録面2における複素振幅 $\psi_2^n$ を計算する．$\psi_2^n$の実振幅を$\sqrt{I_2}$で拘束する．
+
+\paragraph{STEP 3:}
+\begin{equation}
+    \psi_1^{n+1} = \psi_2^n * h_{-\Delta z}
+\end{equation}
+\begin{equation}
+    \phi_1^{n+1} = \arctan{\left( \frac{\Im \psi_1^{n+1}}{\Re \psi_1^{n+1}} \right)}
+\end{equation}
+STEP 2で得た複素振幅 $\psi_2^n$ を記録面1の位置まで伝搬した複素振幅を$\psi_1^{n+1}$とする．$\psi_1^{n+1}$を用いて記録面1における位相分布 $\phi_1^{n+1}$ を計算する．
+
+\paragraph{STEP 4:}
+\begin{equation}
+    \psi_1^{n+1} = \sqrt{I_1} \exp{(\mathrm{j}\phi_1^{n+1})}
+\end{equation}
+STEP 3で得た位相分布 $\phi_1^{n+1}$ を用いて記録面1における複素振幅 $\psi_1^{n+1}$ を計算する．$\psi_1^{n+1}$の実振幅を$\sqrt{I_1}$で拘束する．
+
+\vspace{10pt}
+以上の計算を繰り返すことで，記録面1における複素振幅 $\psi_1$ を得る．ふたつの記録ホログラム間距離$\Delta z$は以下の式から決定する\cite{tanaka2016}．
+\begin{equation}
+    \Delta z = \frac{z_1}{m}, \quad ( m = 1,2,3,\cdots )
+\end{equation}
+
+\subsubsection{位相回復ホログラフィによる再生像品質の改善}
+位相回復ホログラフィによって粒子再生像がGaborホログラフィからどのように改善するか示す．まず，Fig. \ref{fig:twinImage}に示す系の位相回復ホログラフィによる再生像とその輝度プロファイルをFig. \ref{fig:twinImagePR}に示す．Fig. \ref{fig:twinImage:holo}に見られた双画像によるホログラムフリンジはほとんど消失し，Fig. \ref{fig:twinImage:profile}に示すように粒子位置での輝度値が0となりもとの粒子形状関数をよく再現していることがわかる．
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}[t]{0.48\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/PR_twin_image/prrec.pdf}
+        \caption{Reconstructed image of hologram using phase retrieval holography.}
+        \label{fig:twinImagePR:holo}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[t]{0.48\linewidth}
+        \includegraphics[width=\linewidth]{./Figure/2_Theory/PR_twin_image/prprofile.pdf}
+        \caption{Normalized wave amplitude profile of reconstructed images of phase retrieved hologram and gabor hologram along the line $y=\SI{0}{\um}$ }
+        \label{fig:twinImagePR:profile}
+    \end{subfigure}
+
+    \caption{Example of a reconstructed image slice of phase retrieved hologram and its wavefront irradiance profile. The hologram is recorded at $z=\SI{80}{\mm}$, and the image slice is reconstructed at $z=\SI{0}{\mm}$. The particle radius is $a=\SI{50}{\um}$, and the recording wavelength is $\lambda = \SI{632.8}{\nm}$. The distance between the two recording planes is $\Delta z = \SI{40}{\mm}$, and the phase retrieving iteration number is $n=10$. The phase retrieved profile well reproduces the original particle shape: the twin image is suppressed, and the irradiance value on the particle is equal to 0 as in the original particle shape.}
+    \label{fig:twinImagePR}
+\end{figure}
+
+次に，奥行方向への像伸びについて示す．Fig. \ref{fig:particlePRZprofile} にGabor再生，位相回復ホログラフィによる再生，式(\ref{th:particleZprofile})による$z$軸方向正規化輝度プロットを示す．Gabor再生像では粒子位置周辺で輝度値が0にならないため位置検出が困難であったが，位相回復ホログラフィによる再生プロファイルでは粒子位置周辺で輝度値が0となる．式(\ref{th:elongationLength})における$m=3$相当の像伸びを確認できる．この$z$軸輝度プロファイルから，粒子の奥行方向位置を決定する手法について\ref{sec:particleDepth}節で示す．
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/przprofile.pdf}
+    \caption{Normalized $z$-axis irradiance profile of phase retrieved hologram, Gabor hologram and theoretical plot of Eq. (\ref{th:particleZprofile}). The hologram is recorded at $z = \SI{0}{\um}$, particle radius is $a=\SI{50}{\um}$, and the recording wavelength is $\lambda = \SI{632.8}{\nm}$. The same system used in Fig. \ref{fig:twinImagePR} is used for this calculation.}
+    \label{fig:particlePRZprofile}
+\end{figure}
+
+\subsubsection{粒子奥行位置決定手法}\label{sec:particleDepth}
+Fig. \ref{fig:particlePRZprofile}に示すように，位相回復ホログラフィによる再生像では，粒子の真の奥行位置を含む広い領域で輝度値が0となる．奥行方向位置を一点に決定するために，Tamuraの方法を用いる\cite{memmolo2011}．Tamuraの方法では，以下の評価関数 $C^2(z;x,y)$ を最大化するような$z$を求める．
+\begin{equation}
+    \label{th:tamura}
+    C^2(z;x,y) = \frac{\sigma{\left( \bm{I}|_z \right)}}{\mu{\left( \bm{I}|_z \right)}}
+\end{equation}
+$\sigma$，$\mu$はそれぞれ標準偏差，平均値を示す．$\bm{I}|_z$は，ある奥行位置$z$における再生像$I_z$のうち，$x$-$y$平面内の粒子中心$(x,y)$近傍の粒子像を含む部分画像を示す．このようにして決定された $z$ の解像度は，ホログラムの奥行方向再生解像度$\Delta z$と等しい．
+
+Fig. \ref{fig:tamuratheory}に，Fig. \ref{fig:particlePRZprofile}に示す位相回復した再生像の粒子中心$z$軸プロファイルと，式(\ref{th:tamura})に示すプロットを示す．$\bm{I}|_z$は，粒子像をちょうど包含する$2r_p \times 2r_p$の領域に対して計算する．$C^2$が最大値を取る$z$を奥行粒子位置として決定できることがわかる．
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/tamuraprof.pdf}
+    \caption{Tamura $C^2$ function plot of the reconstructed image of phase retrieved hologram. The hologram is recorded at $z = \SI{0}{\um}$, particle radius is $a=\SI{50}{\um}$, and the recording wavelength is $\lambda = \SI{632.8}{\nm}$. The same system used in Fig. \ref{fig:twinImagePR} is used for this calculation.}
+    \label{fig:tamuratheory}
+\end{figure}
 
 
