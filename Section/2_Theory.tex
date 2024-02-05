@@ -73,9 +73,9 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
 式(\ref{th:fresneldiffraction})を，Fresnel回折積分と呼ぶ．
 
 \subsubsection{粒子ホログラムの記録}
-\ref{sec:lightwaveProp}節で示した光伝搬計算を用いて，インラインホログラフィによる粒子像の記録を行う．インラインホログラフィにおける物体面，記録面の関係を図\ref{fig:in-lineHolography}に示す．ただし，物体面を表現する$(x',y')$座標は，式(\ref{th:fresnel-kirchhoff})のように回折積分の積分変数として記録面の$(x,y)$座標と区別する必要があるときだけ用いることとする．物体面および記録面で座標の単位長さは等しく，デカルト座標系を用いるため，これらを上に述べた理由以外で区別する必要はない．
+\ref{sec:lightwaveProp}節で示した光伝搬計算を用いて，インラインホログラフィによる粒子像の記録を行う．インラインホログラフィにおける物体面，記録面の関係をFig. \ref{fig:in-lineHolography}に示す．ただし，物体面を表現する$(x',y')$座標は，式(\ref{th:fresnel-kirchhoff})のように回折積分の積分変数として記録面の$(x,y)$座標と区別する必要があるときだけ用いることとする．物体面および記録面で座標の単位長さは等しく，デカルト座標系を用いるため，これらを上に述べた理由以外で区別する必要はない．
 
-\begin{figure}[htbp]
+\begin{figure}[b]
     \centering
     \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/inline_holography.pdf}
     \caption{Schematic of in-line holography: collimated light illuminates a particle on the object plane, and appears as a diffraction pattern  on the recording plane. The irradiance of the complex amplitude on the recording plane is recorded as a hologram.}
@@ -100,7 +100,7 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
 ここで，$T(x,y) = 1 - A(x,y;0)$は，物体面における透過関数と呼ばれる．これを$z_0$だけ伝搬して記録面の複素振幅$\psi(x,y;z_0)$を計算すると，式(\ref{th:fresneldiffraction}) に示すFresnel回折積分を用いて以下のようになる\cite{vikram}．
 \begin{align}
     \label{th:particleComplexAmplitude}
-    \psi(x,y;z_0) &= -\exp{\left( \frac{2\pi \mathrm{j}}{\lambda |z_0|} \right)} \left\{  
+    \psi(x,y;z_0) &= \exp{\left( \frac{2\pi \mathrm{j}}{\lambda |z_0|} \right)} \left\{  
         1 + \frac{\mathrm{j}}{\lambda |z_0|} \exp{\left[ \frac{\pi \mathrm{j} \left( x^2+y^2 \right)}{\lambda |z_0|}\right] \tilde{A}\left( \frac{x}{\lambda |z_0|}, \frac{y}{\lambda |z_0|} \right) }
      \right\}
 \end{align}
@@ -117,7 +117,7 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
 ただし， $r=\sqrt{x^2+y^2}$である．結局，式(\ref{th:particleComplexAmplitude})は以下のようになる．
 \begin{equation}
     \label{th:particleComplexAmplitude2}
-    \psi(x,y;z_0) = -\exp{\left( \frac{2\pi \mathrm{j}}{\lambda |z_0|} \right)} \left\{  
+    \psi(x,y;z_0) = \exp{\left( \frac{2\pi \mathrm{j}}{\lambda |z_0|} \right)} \left\{  
         1 + \frac{\mathrm{j}}{\lambda |z_0|} \exp{\left[ \frac{\pi \mathrm{j} \left( x^2+y^2 \right)}{\lambda |z_0|}\right] \pi a^2 \frac{2J_1(2\pi a r/ \lambda |z_0|)}{2\pi a r/ \lambda |z_0|} }
      \right\}
 \end{equation}
@@ -130,7 +130,7 @@ $\psi(x,y;z)$の$x,y$に関する二次元フーリエ変換を$U(\alpha,\beta;z
 これに式(\ref{th:particleComplexAmplitude})を代入して，以下を得る\cite{tyler1976}．
 \begin{equation}
     \label{th:particleIrradiance}
-    I(x,y) = 1 - \frac{2\pi a^2}{\lambda |z_0|} \sin{\left( \frac{\pi r^2}{\lambda |z_0|} \right)} \frac{2J_1(2\pi ar/\lambda |z_0|)}{2\pi ar / \lambda |z_0|} + \left( \frac{\pi a^2}{\lambda |z_0|} \right)^2 \left[ \frac{2J_1(2\pi ar/\lambda |z_0|)}{2\pi ar / \lambda |z_0|} \right]
+    I(x,y) = 1 - \frac{2\pi a^2}{\lambda |z_0|} \sin{\left( \frac{\pi r^2}{\lambda |z_0|} \right)} \frac{2J_1(2\pi ar/\lambda |z_0|)}{2\pi ar / \lambda |z_0|} + \left( \frac{\pi a^2}{\lambda |z_0|} \right)^2 \left[ \frac{2J_1(2\pi ar/\lambda |z_0|)}{2\pi ar / \lambda |z_0|} \right]^2
 \end{equation}
 
 \subsubsection{粒子ホログラムの再生}\label{sec:holographicReconstruction}
@@ -237,7 +237,7 @@ Gaborホログラムの再生像のz軸輝度プロファイルと，式(\ref{th
 ここで， $\mathcal{F}^{-1}\left\{ \mathcal{F}\{1-A_i\}G(\alpha,\beta;z_{p1}) \right\}$ は形状関数 $A_i$ を持つそれぞれの粒子が単独で光伝搬した際の複素振幅と等しい．また  $\mathcal{F}^{-1}\left\{ \mathcal{F}\{1\}G(\alpha,\beta;z_{p1}) \right\}$ は背景光の光伝搬を示す．それぞれは式(\ref{th:particleComplexAmplitude})より以下のように計算できる．
 \begin{equation}
     \label{th:vikramEq4.8}
-    \psi_{pi}(x,y) = -\exp{\left(\mathrm{j}\frac{2\pi}{\lambda}|z_{pi}|\right)} \left\{ 1 + \frac{\mathrm{j}}{\lambda |z_{pi}|} \exp{ \left[ \frac{\mathrm{j} \pi \left( x'^2 + y'^2 \right)}{\lambda |z_{pi}|} \right]} \tilde{A_1} \left(\frac{x'}{\lambda |z_{pi}|},\frac{y'}{\lambda |z_{pi}|} \right)  \right\}
+    \psi_{pi}(x,y) = \exp{\left(\mathrm{j}\frac{2\pi}{\lambda}|z_{pi}|\right)} \left\{ 1 + \frac{\mathrm{j}}{\lambda |z_{pi}|} \exp{ \left[ \frac{\mathrm{j} \pi \left( x'^2 + y'^2 \right)}{\lambda |z_{pi}|} \right]} \tilde{A_1} \left(\frac{x'}{\lambda |z_{pi}|},\frac{y'}{\lambda |z_{pi}|} \right)  \right\}
 \end{equation}
 % vikram 4.8 式
 ただし， $x' = x- x_{pi}$， $y' = y-y_{pi}$ である．また，背景光の光伝搬 $\mathcal{F}^{-1}\left\{ \mathcal{F}\{1\}G(\alpha,\beta;z_{p1}) \right\}$ は以下のようになる．
@@ -252,7 +252,7 @@ Gaborホログラムの再生像のz軸輝度プロファイルと，式(\ref{th
 \end{align}
 このように定めた粒子1の複素振幅を $\psi_{A_1}$，粒子2の複素振幅を $\psi_{A_1}$ とする．系をFig. \ref{fig:twoParticleHolography}に示す．
 
-\begin{figure}[htbp]
+\begin{figure}[b]
     \centering
     \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/two_particle.pdf}
     \caption{Schematic of two-particle holography: two particles are located at $(0,0)$ and $(\Delta \xi, \Delta \eta)$, respectively. The depth position of the particles are the same, $z_{p1} = z_{p2}$.}
@@ -267,12 +267,13 @@ Gaborホログラムの再生像のz軸輝度プロファイルと，式(\ref{th
 \end{align}
 ここで，式(\ref{th:extraterms})右辺第3項以降を以下のように近似する．
 \begin{equation}
+    \label{th:extratermsApprox}
     1 + 2\Re \left\{ \psi_{A_1} \overline{\psi_{A_2}} \right\} - 2\Re \left\{\overline{\psi_b}\left( \psi_{A_1} + \psi_{A_2} \right)\right\} = -1
 \end{equation}
-この近似の詳細については，付録\ref{sec:appendix_2particle}で述べる．結局，ホログラムは以下の式で与えられる．
+この近似の詳細については，付録\ref{sec:appendix_2particle}節で述べる．結局，ホログラムは以下の式で与えられる．
 \begin{equation}
     \label{th:2particleHologram}
-    I(x,y) = |\psi_{A_1}|^2 + |\psi_{A_2}|^2 - 1
+    I(x,y) = |\psi_{A_1}|^2 + |\psi_{A_2}|^2 -1
 \end{equation}
 したがって，同一物体面上同径近接粒子のホログラムは，二重露光ホログラフィで用いられていた以下の計算を適用可能になる\cite{doubleexposure}．
 
@@ -295,7 +296,7 @@ Gaborホログラムの再生像のz軸輝度プロファイルと，式(\ref{th
     \label{th:2particleSpectrum}
     &= \left| \tilde{A} \right|^2 \cos^2{\left( \pi \lambda z_0 \gamma^2 \right)} \cos^2{\left( \pi \left( \alpha \Delta \xi + \beta \Delta \eta \right) \right)}
 \end{align}
-ここで，式(\ref{th:2particleSpectrum})の各因数の寄与を調べるために，数値生成したホログラムの例，ホログラムのスペクトル分布，同条件の式(\ref{th:2particleSpectrum})のプロットをFig. \ref{fig:2particleSpectrum}に示す．Fig. \ref{fig:2particleSpectrum:a}に示す物体面面像から式(\ref{th:lightProp_angularSpectrum})に示す光伝搬を用いてホログラムFig. \ref{fig:2particleSpectrum:b}を記録する．Fig. \ref{fig:2particleSpectrum:c}に示すスペクトルは，Fig. \ref{fig:2particleSpectrum:b}に対する高速フーリエ変換で得たものである．Fig. \ref{fig:2particleSpectrum:d}に示すスペクトルは，式(\ref{th:2particleSpectrum})を用いて計算したものである．式(\ref{th:2particleSpectrum})の因数 $\left| \tilde{A} \right|^2$ は，スペクトル分布において周期が変化しない同心円パターンとして現れている．これは，式(\ref{th:fourierOfA})に示す通り伝搬距離 $z_0$ に依存しないため，粒子の伝搬距離の変化に対してこのパターンは変化しない．Fig. \ref{fig:2particleSpectrum:d}では同心円パターンとして現れているが，Fig. \ref{fig:2particleSpectrum:c}では矩形領域に対する離散フーリエ変換の影響でパターンが歪んでいる．因数 $\cos^2{\left( \pi \lambda z_0 \gamma^2 \right)}$ は，スペクトル分布で確認できる残りの同心円パターンとして現れており，座標中心から離れるほど周期が短くなる．このパターンは，例に示す $z_0 = \SI{20}{\mm}$ 程度の小さな伝搬距離であれば確認できるが，一般的な記録条件で用いる伝搬距離ではエイリアシングによって確認できなくなる．最後に，因数 $\cos^2{\left( \pi \left( \alpha \Delta \xi + \beta \Delta \eta \right) \right)}$ はスペクトル分布の縞パターンを表す．このパターンは粒子組の平面内距離 $\Delta \xi$，$\Delta \eta$ に依存し，またこれらのみに依存するため，縞パターンの法線ベクトルから平面内距離を一意に決定できる．本節では同径かつ奥行方向距離を持たない２粒子のホログラムについて調べたが，半径が異なる場合，奥行方向距離を持つ場合のホログラフィックパターンについては付録\ref{sec:appendix_deviation}で述べる．
+ここで，式(\ref{th:2particleSpectrum})の各因数の寄与を調べるために，数値生成したホログラムの例，ホログラムのスペクトル分布，同条件の式(\ref{th:2particleSpectrum})のプロットをFig. \ref{fig:2particleSpectrum}に示す．Fig. \ref{fig:2particleSpectrum:a}に示す物体面面像から式(\ref{th:lightProp_angularSpectrum})に示す光伝搬を用いてホログラムFig. \ref{fig:2particleSpectrum:b}を記録する．Fig. \ref{fig:2particleSpectrum:c}に示すスペクトルは，Fig. \ref{fig:2particleSpectrum:b}に対する高速フーリエ変換で得たものである．Fig. \ref{fig:2particleSpectrum:d}に示すスペクトルは，式(\ref{th:2particleSpectrum})を用いて計算したものである．式(\ref{th:2particleSpectrum})の因数 $\left| \tilde{A} \right|^2$ は，スペクトル分布において周期が変化しない同心円パターンとして現れている．これは，式(\ref{th:fourierOfA})に示す通り伝搬距離 $z_0$ に依存しないため，粒子の伝搬距離の変化に対してこのパターンは変化しない．Fig. \ref{fig:2particleSpectrum:d}では同心円パターンとして現れているが，Fig. \ref{fig:2particleSpectrum:c}では矩形領域に対する離散フーリエ変換の影響でパターンが歪んでいる．因数 $\cos^2{\left( \pi \lambda z_0 \gamma^2 \right)}$ は，スペクトル分布で確認できる残りの同心円パターンとして現れており，座標中心から離れるほど周期が短くなる．このパターンは，例に示す $z_0 = \SI{20}{\mm}$ 程度の小さな伝搬距離であれば確認できるが，一般的な記録条件で用いる伝搬距離ではエイリアシングによって確認できなくなる．最後に，因数 $\cos^2{\left( \pi \left( \alpha \Delta \xi + \beta \Delta \eta \right) \right)}$ はスペクトル分布の縞パターンを表す．このパターンは粒子組の平面内距離 $\Delta \xi$，$\Delta \eta$ に依存し，またこれらのみに依存するため，縞パターンの法線ベクトルから平面内距離を一意に決定できる．本節では同径かつ奥行方向距離を持たない２粒子のホログラムについて調べたが，半径が異なる場合，奥行方向距離を持つ場合のホログラフィックパターンについては付録\ref{sec:appendix_deviation}節で述べる．
 
 \begin{figure}[htbp]
     \centering
@@ -329,7 +330,7 @@ Gaborホログラムの再生像のz軸輝度プロファイルと，式(\ref{th
 
 \subsubsection{離散スペクトル分布の縞パターンによる平面内距離の決定}
 縞パターンの向き・および周期と平面内距離の関係が一意であることを\ref{sec:twoParticleHologram}節で示した．この節では，２粒子ホログラム画像のスペクトル分布上に現れる縞パターンから，粒子組の平面内距離 $(\Delta\xi,\Delta\eta)$ を決定する方法を示す．Fig. \ref{fig:stripePatternVector}に示すように縞パターンの状態を定義する．図中$\alpha$，$\beta$軸に沿って定義される離散点間隔 $l,\,m \mathrm{[pixel]}$ は，各軸の縞間隔である．図中では軸の次元と一致させるためにフーリエ変換を施す矩形領域一辺のピクセル長 $L \mathrm{\,[pixel]}$ とピクセルピッチ $\Delta x \mathrm{\,[\si{\um}]}$ の積で除している．
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/stripe_pattern.pdf}
     \caption{Schematic diagram defining the orientation and spacing of the stripe pattern using the displacements $l$ and $m$ along the $\alpha$ and $\beta$ axes. The displacement along each axis determines the characteristics of the stripe pattern and corresponds uniquely to the proximity state of the two particles}
@@ -357,7 +358,7 @@ $l$ および $m$ は $2 \leq l, m < L$ を満たす必要があるため，測�
 \end{equation}
 
 \subsection{畳み込みニューラルネットワークによる局所特徴識別}\label{sec:convolutionalNeuralNetwork}
-\ref{sec:twoParticleHologramFeature}節において，近接粒子組のホログラムをそのスペクトル分布の局所特徴から識別可能であることを示した．本論文では，この原理を用いて，畳み込みニューラルネットワーク(Convolutional Neural Network: CNN)\cite{lecun1998}をベースとした画像認識モデルによって近接粒子組の識別を行う．このために本節では，画像認識モデルの学習・推論の原理と基本的な構造について示す．\ref{sec:supervisedClassification}節から\ref{sec:convolutionalLayer}までは機械学習の代表的なテキストであるBishop (2006)による\cite{bishop2006}．
+\ref{sec:twoParticleHologramFeature}節において，近接粒子組のホログラムをそのスペクトル分布の局所特徴から識別可能であることを示した．本論文では，この原理を用いて，畳み込みニューラルネットワーク(Convolutional Neural Network: CNN)\cite{lecun1998}をベースとした画像認識モデルによって近接粒子組の識別を行う．このために本節では，画像認識モデルの学習・推論の原理と基本的な構造について示す．\ref{sec:supervisedClassification}から\ref{sec:convolutionalLayer}節までは機械学習の代表的なテキストであるBishop (2006)による\cite{bishop2006}．
 
 \subsubsection{教師あり分類モデルの学習・推論}\label{sec:supervisedClassification}
 教師あり分類モデルは，与えられたデータ $\bm{x}_i$ に対してそれが属する分類のクラス $C_k$ を推定する．本研究において，データのクラス数 $K$ はつねに2である．一般に深層学習を用いる識別モデルでは，データの正解ラベル $\bm{t}_i$，すなわちモデルが学習の後の推定結果として出力するのが望ましいデータは$K$次元ベクトルであり，例えばクラス1に属するデータの正解ラベルは以下のように表現される．
@@ -410,7 +411,7 @@ $\bm{W}_j$は$\mathrm{dim}\bm{\phi}_{j+1}\times \mathrm{dim}\bm{\phi}_{j}$型の
     \bm{Y}_i = \sigma \left( \bm{W} \ast \bm{X}_i + \bm{A} \right)
 \end{equation}
 ひとつの畳み込み層では一般に複数のカーネルを定義し，それぞれのカーネルによる畳み込み計算を行う．畳み込み層への入力データのチャネル数を $C$，カーネル数を $n$ とすると，入力データ・出力データの関係はFig. \ref{fig:convolutionalLayer}に示すようになる．
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{./Figure/2_Theory/cnn.pdf}
     \caption{Schematic diagram of a convolutional layer. The input data $\bm{X}_i$ is a $C\times L \times L$ array, and the output data $\bm{Y}_i$ is a $C\times n\times (L-L_k+1) \times (L-L_k+1)$ array.}
